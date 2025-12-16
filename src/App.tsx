@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, useMemo, memo } from 'react';
+import React, { useState, useEffect, Suspense, useMemo, memo, useCallback, useRef } from 'react';
 import { MapPin, Menu, Star, ArrowRight, Zap, X, Phone, Sparkles, Brain, Gift, Thermometer, User, Plus, BadgeCheck, Smile, Layers, Clock, Instagram, Send, ChevronUp, Users, FileText, Award } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { CITIES, SERVICES, REVIEWS, SPECIALISTS, FAQ_ITEMS } from './constants';
@@ -6,32 +6,44 @@ import { City } from './types';
 
 import homeImg from './assets/home.webp';
 import ozeroImg from './assets/ozero.webp';
+import logoImg from './assets/logo.jpg';
 
 const ChatWidget = React.lazy(() => import('./components/ChatWidget').then(module => ({ default: module.ChatWidget })));
 const BookingModal = React.lazy(() => import('./components/BookingModal').then(module => ({ default: module.BookingModal })));
 
+interface PageContentProps {
+  selectedCity: City;
+  toggleBooking: (serviceId?: string) => void;
+  servicesByCategory: {
+    sets: typeof SERVICES;
+    body: typeof SERVICES;
+    face: typeof SERVICES;
+  };
+}
+
 const PageContent = memo(({ 
   selectedCity, 
   toggleBooking, 
-  activeCategory, 
-  setActiveCategory, 
-  servicesByCategory, 
-  shouldShow, 
-  activeFaq, 
-  setActiveFaq 
-}: any) => {
+  servicesByCategory
+}: PageContentProps) => {
+  // Move state that only affects PageContent inside
+  const [activeCategory, setActiveCategory] = useState<'all' | 'sets' | 'face' | 'body'>('all');
+  const [activeFaq, setActiveFaq] = useState<number | null>(0);
+  
+  // Computed value - no need for useCallback since it's just a comparison
+  const shouldShow = (cat: 'sets' | 'face' | 'body') => activeCategory === 'all' || activeCategory === cat;
   return (
     <>
       {/* Hero Section */}
-      <section className="relative pt-48 pb-16 lg:pt-60 lg:pb-32 overflow-hidden">
-        {/* Animated Background blobs with GPU acceleration */}
-        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-brand-200/30 rounded-full blur-[100px] animate-blob gpu-accelerated"></div>
-        <div className="absolute bottom-0 left-[-10%] w-[500px] h-[500px] bg-purple-200/30 rounded-full blur-[100px] animate-blob animation-delay-2000 gpu-accelerated"></div>
+      <section className="relative pt-48 pb-16 lg:pt-60 lg:pb-32 overflow-hidden contain-paint">
+        {/* Static Background gradients (no animation for performance) */}
+        <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] bg-gradient-radial from-brand-100/40 to-transparent rounded-full pointer-events-none"></div>
+        <div className="absolute bottom-0 left-[-10%] w-[350px] h-[350px] bg-gradient-radial from-purple-100/30 to-transparent rounded-full pointer-events-none"></div>
 
         <div className="container mx-auto px-6 relative z-10">
            <div className="grid lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-6 lg:pr-10">
-                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 border border-white shadow-sm text-brand-600 rounded-full text-xs font-bold uppercase tracking-widest mb-8 backdrop-blur-md animate-fade-in">
+                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 shadow-sm text-brand-600 rounded-full text-xs font-bold uppercase tracking-widest mb-8">
                     <Zap size={14} fill="currentColor" />
                     Pioneer Ozero Khanka 2024
                  </div>
@@ -89,16 +101,16 @@ const PageContent = memo(({
               </div>
 
               <div className="lg:col-span-6 relative mt-12 lg:mt-0">
-                 <div className="relative z-10 aspect-[4/5] animate-float gpu-accelerated">
+                 <div className="relative z-10 aspect-[4/5]">
                     <img 
                       src={homeImg} 
-                      className="w-full h-full object-cover rounded-[3rem] shadow-2xl border-8 border-white" 
+                      className="w-full h-full object-cover rounded-[3rem] shadow-xl border-8 border-white" 
                       alt="Лазерная эпиляция" 
                       fetchpriority="high"
                     />
                     
-                    {/* Floating Cards */}
-                    <div className="absolute top-12 -right-8 bg-white/80 backdrop-blur-xl p-5 rounded-3xl shadow-glow-sm border border-white animate-float-delayed gpu-accelerated">
+                    {/* Floating Cards - static for performance */}
+                    <div className="absolute top-12 -right-8 bg-white p-5 rounded-3xl shadow-card border border-gray-100">
                        <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center">
                              <Thermometer size={24} />
@@ -115,10 +127,10 @@ const PageContent = memo(({
         </div>
       </section>
 
-      {/* Marquee Section (GPU Accelerated) */}
-      <div className="bg-brand-50 border-y border-brand-100 overflow-hidden py-4">
-        <div className="whitespace-nowrap animate-marquee flex gap-8 items-center text-brand-900 text-sm font-extrabold uppercase tracking-widest gpu-accelerated">
-           {[...Array(4)].map((_, i) => (
+      {/* Marquee Section */}
+      <div className="bg-brand-50 border-y border-brand-100 overflow-hidden py-4 contain-paint">
+        <div className="whitespace-nowrap animate-marquee flex gap-8 items-center text-brand-900 text-sm font-extrabold uppercase tracking-widest">
+           {[...Array(2)].map((_, i) => (
              <React.Fragment key={i}>
                 <span>БЕЗ БОЛИ</span>
                 <span className="text-brand-300">•</span>
@@ -145,7 +157,7 @@ const PageContent = memo(({
               </div>
 
               {/* Category Filter Tabs */}
-              <div className="flex gap-2 p-1.5 bg-white/60 backdrop-blur-sm border border-white rounded-2xl overflow-x-auto no-scrollbar max-w-full">
+              <div className="flex gap-2 p-1.5 bg-white border border-gray-100 rounded-2xl overflow-x-auto no-scrollbar max-w-full">
                   {(['all', 'sets', 'body', 'face'] as const).map((cat) => (
                       <button
                         key={cat}
@@ -239,9 +251,9 @@ const PageContent = memo(({
                    {/* AI Card */}
                    {activeCategory === 'all' && (
                      <div className="rounded-[2.5rem] p-8 text-white relative overflow-hidden shadow-xl bg-gradient-to-br from-brand-900 via-brand-800 to-purple-900 group active:scale-[0.99] transition-transform">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-500/30 rounded-full blur-[80px] group-hover:bg-brand-500/50 transition-colors duration-700"></div>
+                        <div className="absolute top-0 right-0 w-48 h-48 bg-brand-500/20 rounded-full pointer-events-none"></div>
                         <div className="relative z-10 flex flex-col items-start gap-4">
-                           <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 shrink-0 mb-2">
+                           <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10 shrink-0 mb-2">
                               <Brain size={28} className="text-brand-200" />
                            </div>
                            <div>
@@ -335,7 +347,7 @@ const PageContent = memo(({
                {/* Side Cards */}
                <div className="grid gap-6">
                   <div className="bg-dark text-white rounded-[2.5rem] p-8 shadow-card flex flex-col justify-center relative overflow-hidden group hover:shadow-glow-sm transition-shadow">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/15 rounded-full pointer-events-none"></div>
                       <Thermometer size={32} className="text-blue-400 mb-4" />
                       <h4 className="text-2xl font-bold mb-2">Cooling Tech™</h4>
                       <p className="text-gray-400 text-sm">Сапфировый наконечник охлаждается до -10°C, полностью блокируя боль.</p>
@@ -425,11 +437,9 @@ const PageContent = memo(({
       </section>
 
       {/* Reviews Section */}
-      <section id="reviews" className="py-24 bg-dark relative overflow-hidden">
-         <div className="absolute inset-0">
-             <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-600/20 rounded-full blur-[120px] animate-blob gpu-accelerated"></div>
-             <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] animate-blob animation-delay-2000 gpu-accelerated"></div>
-         </div>
+      <section id="reviews" className="py-24 bg-dark relative overflow-hidden contain-paint">
+         {/* Static gradient backgrounds for performance */}
+         <div className="absolute inset-0 bg-gradient-to-br from-brand-900/30 via-transparent to-purple-900/20 pointer-events-none"></div>
 
          <div className="container mx-auto px-6 relative z-10">
              <div className="flex flex-col md:flex-row justify-between items-end mb-16">
@@ -524,7 +534,7 @@ const PageContent = memo(({
             <div className="grid md:grid-cols-4 gap-12 mb-16">
                <div className="md:col-span-2">
                   <div className="flex items-center gap-2 mb-6">
-                     <div className="w-8 h-8 bg-brand-500 text-white rounded-lg flex items-center justify-center font-extrabold text-lg">V</div>
+                     <img src={logoImg} alt="ViVi Logo" className="w-8 h-8 rounded-lg object-cover" />
                      <span className="font-extrabold text-2xl text-dark">ViVi</span>
                   </div>
                   <p className="text-gray-500 leading-relaxed max-w-sm mb-8">
@@ -574,39 +584,45 @@ const App: React.FC = () => {
   const [preselectedServiceId, setPreselectedServiceId] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [showCityToast, setShowCityToast] = useState(false);
-  const [activeFaq, setActiveFaq] = useState<number | null>(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  
-  // Service Category Filter State
-  const [activeCategory, setActiveCategory] = useState<'all' | 'sets' | 'face' | 'body'>('all');
 
-  // Optimized Scroll Handler using requestAnimationFrame
+  // Refs to track previous values and avoid unnecessary re-renders
+  const scrolledRef = useRef(false);
+  const showScrollTopRef = useRef(false);
+  const rafIdRef = useRef<number | null>(null);
+
+  // Optimized Scroll Handler - only updates state when values actually change
   useEffect(() => {
-    let ticking = false;
-
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          
-          setScrolled(prev => {
-             const isScrolled = scrollY > 10;
-             return prev !== isScrolled ? isScrolled : prev;
-          });
-          
-          setShowScrollTop(prev => {
-             const shouldShow = scrollY > 500;
-             return prev !== shouldShow ? shouldShow : prev;
-          });
+      if (rafIdRef.current !== null) return;
+      
+      rafIdRef.current = window.requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const isScrolled = scrollY > 10;
+        const shouldShowScrollTop = scrollY > 500;
+        
+        // Only update state if values changed
+        if (scrolledRef.current !== isScrolled) {
+          scrolledRef.current = isScrolled;
+          setScrolled(isScrolled);
+        }
+        
+        if (showScrollTopRef.current !== shouldShowScrollTop) {
+          showScrollTopRef.current = shouldShowScrollTop;
+          setShowScrollTop(shouldShowScrollTop);
+        }
 
-          ticking = false;
-        });
-        ticking = true;
-      }
+        rafIdRef.current = null;
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
   }, []);
 
   // Automatic City Detection
@@ -687,35 +703,35 @@ const App: React.FC = () => {
     }
   }, []);
 
-  const handleCityChange = (city: City) => {
+  const handleCityChange = useCallback((city: City) => {
      setSelectedCity(city);
      setIsMenuOpen(false);
      setShowCityToast(false);
      localStorage.setItem('vivi_city_id', city.id);
-  };
+  }, []);
 
-  const confirmAutoCity = () => {
+  const confirmAutoCity = useCallback(() => {
     setShowCityToast(false);
     localStorage.setItem('vivi_city_id', selectedCity.id);
-  };
+  }, [selectedCity.id]);
 
-  const requestCityChange = () => {
+  const requestCityChange = useCallback(() => {
     setShowCityToast(false);
     setIsMenuOpen(true);
-  };
+  }, []);
 
-  const toggleBooking = (serviceId?: string) => {
+  const toggleBooking = useCallback((serviceId?: string) => {
     if (serviceId && typeof serviceId === 'string') {
       setPreselectedServiceId(serviceId);
     } else {
       setPreselectedServiceId(null);
     }
-    setIsBookingOpen(!isBookingOpen);
-  };
+    setIsBookingOpen(prev => !prev);
+  }, []);
 
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
   // Group services (Memoized to prevent recalc on every render)
   const servicesByCategory = useMemo(() => ({
@@ -723,9 +739,6 @@ const App: React.FC = () => {
     body: SERVICES.filter(s => s.category === 'body'),
     face: SERVICES.filter(s => s.category === 'face'),
   }), []);
-
-  // Helper to check if a category should be shown
-  const shouldShow = (cat: 'sets' | 'face' | 'body') => activeCategory === 'all' || activeCategory === cat;
 
   // SEO: Schema.org JSON-LD Generation
   const schemaData = useMemo(() => {
@@ -836,7 +849,7 @@ const App: React.FC = () => {
       <header className={`fixed top-12 left-0 right-0 z-40 transition-all duration-500 px-0 md:px-6 flex justify-center`}>
         <nav className={`w-full max-w-[1400px] md:rounded-3xl px-6 py-4 flex justify-between items-center transition-all duration-300 border ${scrolled ? 'glass border-white/40 shadow-card' : 'bg-transparent border-transparent'}`}>
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-brand-500 text-white rounded-xl flex items-center justify-center font-extrabold text-xl shadow-glow-sm">V</div>
+            <img src={logoImg} alt="ViVi Logo" className="w-10 h-10 rounded-xl object-cover shadow-glow-sm" />
             <span className="font-extrabold text-2xl tracking-tight text-dark">ViVi.</span>
           </div>
 
@@ -884,12 +897,7 @@ const App: React.FC = () => {
       <PageContent 
         selectedCity={selectedCity}
         toggleBooking={toggleBooking}
-        activeCategory={activeCategory}
-        setActiveCategory={setActiveCategory}
         servicesByCategory={servicesByCategory}
-        shouldShow={shouldShow}
-        activeFaq={activeFaq}
-        setActiveFaq={setActiveFaq}
       />
 
       {/* Sticky Bottom Bar (Mobile) */}

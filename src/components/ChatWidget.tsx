@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
 import { ChatMessage, LoadingState } from '../types';
-import { sendMessageToGemini } from '../services/geminiService';
+import { sendMessageToMistral } from '../services/mistralService';
 
 export const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +28,7 @@ export const ChatWidget: React.FC = () => {
     setInput('');
     setStatus(LoadingState.LOADING);
 
-    const replyText = await sendMessageToGemini(userMsg.text);
+    const replyText = await sendMessageToMistral(userMsg.text);
     
     const botMsg: ChatMessage = { role: 'model', text: replyText, timestamp: new Date() };
     setMessages(prev => [...prev, botMsg]);
