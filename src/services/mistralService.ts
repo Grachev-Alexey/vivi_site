@@ -34,7 +34,7 @@ export const sendMessageToMistral = async (message: string): Promise<string> => 
         'Authorization': `Bearer ${API_KEY}`
       },
       body: JSON.stringify({
-        model: 'mistral-small-latest',
+        model: 'mistral-medium-latest',
         messages: conversationHistory,
         temperature: 0.7,
         max_tokens: 500

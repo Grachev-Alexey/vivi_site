@@ -53,8 +53,8 @@ export const ChatWidget: React.FC = () => {
                 <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-brand-500"></div>
               </div>
               <div>
-                 <span className="font-bold text-lg block leading-tight">ViVi Consultant</span>
-                 <span className="text-xs text-white/80 font-medium">Online</span>
+                 <span className="font-bold text-lg block leading-tight">ViVi консультант</span>
+                 <span className="text-xs text-white/80 font-medium">Онлайн</span>
               </div>
             </div>
             <button onClick={() => setIsOpen(false)} className="bg-white/20 p-2 rounded-full hover:bg-white/30 transition">

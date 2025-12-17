@@ -4,21 +4,21 @@ import { City, Service } from './types';
 const UNIFIED_PHONE = '+7 (969) 777-14-85';
 
 export const CITIES: City[] = [
-  { id: 'krasnodar', name: 'Краснодар', address: 'ул. Карасунская 79, салон красоты Даната', phone: UNIFIED_PHONE, detectionAliases: ['Krasnodar'], coordinates: { lat: 45.0355, lng: 38.9753 } },
-  { id: 'irkutsk', name: 'Иркутск', address: 'ул. Софьи Перовской, дом 30, оф. 326', phone: UNIFIED_PHONE, detectionAliases: ['Irkutsk'], coordinates: { lat: 52.2869, lng: 104.3050 } },
-  { id: 'kazan', name: 'Казань', address: 'ул. Спартаковская 88Б', phone: UNIFIED_PHONE, detectionAliases: ['Kazan'], coordinates: { lat: 55.7961, lng: 49.1064 } },
-  { id: 'volgograd', name: 'Волгоград', address: 'проспект Ленина, д. 36', phone: UNIFIED_PHONE, detectionAliases: ['Volgograd'], coordinates: { lat: 48.7080, lng: 44.5133 } },
-  { id: 'samara', name: 'Самара', address: 'Улица Ново-Садовая, 8/4, 1 этаж, студия красоты Anatomia', phone: UNIFIED_PHONE, detectionAliases: ['Samara'], coordinates: { lat: 53.2415, lng: 50.2212 } },
-  { id: 'krasnoyarsk', name: 'Красноярск', address: 'БЦ Метрополь, пр-кт Мира, д.10', phone: UNIFIED_PHONE, detectionAliases: ['Krasnoyarsk'], coordinates: { lat: 56.0153, lng: 92.8932 } },
-  { id: 'novosibirsk', name: 'Новосибирск', address: 'Ядринцевская 18, студия красоты Контраст, 1 этаж', phone: UNIFIED_PHONE, detectionAliases: ['Novosibirsk'], coordinates: { lat: 55.0084, lng: 82.9357 } },
-  { id: 'spb-pionerskaya', name: 'СПб (Пионерская)', address: 'Аллея Поликарпова, 2. Бьюти-коворкинг Cosmo', phone: UNIFIED_PHONE, detectionAliases: ['Saint Petersburg', 'St Petersburg'], coordinates: { lat: 59.9343, lng: 30.3351 } },
-  { id: 'spb-spasskaya', name: 'СПб (Садовая/Спасская)', address: 'ул. Гороховая, д.50', phone: UNIFIED_PHONE, detectionAliases: [], coordinates: { lat: 59.9343, lng: 30.3351 } },
-  { id: 'tyumen', name: 'Тюмень', address: 'ул. Малыгина 90', phone: UNIFIED_PHONE, detectionAliases: ['Tyumen'], coordinates: { lat: 57.1613, lng: 65.5250 } },
-  { id: 'ekb', name: 'Екатеринбург', address: 'проспект Ленина 53, салон красоты Ptichkas style', phone: UNIFIED_PHONE, detectionAliases: ['Yekaterinburg', 'Ekaterinburg'], coordinates: { lat: 56.8389, lng: 60.6057 } },
-  { id: 'chelyabinsk', name: 'Челябинск', address: 'Ул. Маркса, 81', phone: UNIFIED_PHONE, detectionAliases: ['Chelyabinsk'], coordinates: { lat: 55.1644, lng: 61.4368 } },
-  { id: 'rostov', name: 'Ростов-на-Дону', address: 'Газетный пер., 53', phone: UNIFIED_PHONE, detectionAliases: ['Rostov-on-Don', 'Rostov'], coordinates: { lat: 47.2357, lng: 39.7015 } },
-  { id: 'omsk', name: 'Омск', address: 'ул. Ленина 53, салон красоты Joli', phone: UNIFIED_PHONE, detectionAliases: ['Omsk'], coordinates: { lat: 54.9885, lng: 73.3242 } },
-  { id: 'ufa', name: 'Уфа', address: 'Заки Валиди 73, студия Эстетик Лаундж', phone: UNIFIED_PHONE, detectionAliases: ['Ufa'], coordinates: { lat: 54.7388, lng: 55.9721 } },
+  { id: 'krasnodar', name: 'Краснодар', address: 'ул. Карасунская 79, салон красоты Даната', phone: UNIFIED_PHONE, detectionAliases: ['Krasnodar'], coordinates: { lat: 45.0275, lng: 38.9715 } },
+  { id: 'irkutsk', name: 'Иркутск', address: 'ул. Софьи Перовской, дом 30, оф. 326', phone: UNIFIED_PHONE, detectionAliases: ['Irkutsk'], coordinates: { lat: 52.2885, lng: 104.2940 } },
+  { id: 'kazan', name: 'Казань', address: 'ул. Спартаковская 88Б', phone: UNIFIED_PHONE, detectionAliases: ['Kazan'], coordinates: { lat: 55.7745, lng: 49.1385 } },
+  { id: 'volgograd', name: 'Волгоград', address: 'проспект Ленина, д. 36', phone: UNIFIED_PHONE, detectionAliases: ['Volgograd'], coordinates: { lat: 48.7155, lng: 44.5265 } },
+  { id: 'samara', name: 'Самара', address: 'Улица Ново-Садовая, 8/4, 1 этаж, студия красоты Anatomia', phone: UNIFIED_PHONE, detectionAliases: ['Samara'], coordinates: { lat: 53.2035, lng: 50.1250 } },
+  { id: 'krasnoyarsk', name: 'Красноярск', address: 'БЦ Метрополь, пр-кт Мира, д.10', phone: UNIFIED_PHONE, detectionAliases: ['Krasnoyarsk'], coordinates: { lat: 56.0125, lng: 92.8735 } },
+  { id: 'novosibirsk', name: 'Новосибирск', address: 'Ядринцевская 18, студия красоты Контраст, 1 этаж', phone: UNIFIED_PHONE, detectionAliases: ['Novosibirsk'], coordinates: { lat: 55.0325, lng: 82.9265 } },
+  { id: 'spb-pionerskaya', name: 'СПб (Пионерская)', address: 'Аллея Поликарпова, 2. Бьюти-коворкинг Cosmo', phone: UNIFIED_PHONE, detectionAliases: ['Saint Petersburg', 'St Petersburg'], coordinates: { lat: 60.0025, lng: 30.2985 } },
+  { id: 'spb-spasskaya', name: 'СПб (Садовая/Спасская)', address: 'ул. Гороховая, д.50', phone: UNIFIED_PHONE, detectionAliases: [], coordinates: { lat: 59.9285, lng: 30.3230 } },
+  { id: 'tyumen', name: 'Тюмень', address: 'ул. Малыгина 90', phone: UNIFIED_PHONE, detectionAliases: ['Tyumen'], coordinates: { lat: 57.1435, lng: 65.5565 } },
+  { id: 'ekb', name: 'Екатеринбург', address: 'проспект Ленина 53, салон красоты Ptichkas style', phone: UNIFIED_PHONE, detectionAliases: ['Yekaterinburg', 'Ekaterinburg'], coordinates: { lat: 56.8405, lng: 60.6165 } },
+  { id: 'chelyabinsk', name: 'Челябинск', address: 'Ул. Маркса, 81', phone: UNIFIED_PHONE, detectionAliases: ['Chelyabinsk'], coordinates: { lat: 55.1655, lng: 61.4015 } },
+  { id: 'rostov', name: 'Ростов-на-Дону', address: 'Газетный пер., 53', phone: UNIFIED_PHONE, detectionAliases: ['Rostov-on-Don', 'Rostov'], coordinates: { lat: 47.2225, lng: 39.7185 } },
+  { id: 'omsk', name: 'Омск', address: 'ул. Ленина 53, салон красоты Joli', phone: UNIFIED_PHONE, detectionAliases: ['Omsk'], coordinates: { lat: 54.9685, lng: 73.3825 } },
+  { id: 'ufa', name: 'Уфа', address: 'Заки Валиди 73, студия Эстетик Лаундж', phone: UNIFIED_PHONE, detectionAliases: ['Ufa'], coordinates: { lat: 54.7185, lng: 55.9355 } },
 ];
 
 export const SERVICES: Service[] = [

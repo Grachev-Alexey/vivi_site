@@ -5,12 +5,17 @@ A React-based landing page for ViVi Laser clinic, featuring a modern design with
 
 ## Project Structure
 - `src/` - Main source code
-  - `App.tsx` - Main application component
-  - `components/` - React components (BookingModal, ChatWidget)
+  - `App.tsx` - Main application component (refactored, ~300 lines)
+  - `components/` - React components
+    - `sections/` - Page section components (HeroSection, ServicesSection, TechnologySection, SpecialistsSection, FAQSection, ReviewsSection, LocationSection, Footer, MarqueeSection)
+    - `ui/` - UI components (Header, FomoBanner, CityToast, MobileNav, ScrollTopButton)
+    - `BookingModal.tsx` - Booking modal (lazy loaded)
+    - `ChatWidget.tsx` - AI chat widget (lazy loaded)
   - `services/` - Services including Mistral AI integration
   - `assets/` - Images and static assets (logo.jpg, home.webp, etc.)
   - `constants.ts` - Application constants
   - `types.ts` - TypeScript type definitions
+  - `index.css` - Global styles with optimized animations
   - `vite-env.d.ts` - TypeScript declarations for image imports
 - `vite.config.ts` - Vite configuration (port 5000, all hosts allowed)
 - `postcss.config.js` - PostCSS configuration for Tailwind
@@ -36,19 +41,30 @@ A React-based landing page for ViVi Laser clinic, featuring a modern design with
 ## Security Notes
 - The chat widget uses Mistral AI. For production, the API key should be proxied through a backend service to avoid exposing it in the browser bundle. The current implementation is suitable for development/demo purposes. Without an API key, the chat gracefully shows a fallback message.
 
+## Performance Optimizations
+- **Component Architecture**: Split into separate memoized components for optimal React rendering
+- **Lazy Loading**: BookingModal and ChatWidget are lazy-loaded for faster initial page load
+- **CSS Optimizations**:
+  - GPU-accelerated animations using transform3d and will-change
+  - CSS containment (contain: layout style) for isolated repaints
+  - Reduced motion support for accessibility
+  - Optimized transitions with cubic-bezier timing functions
+- **React Optimizations**:
+  - React.memo on all section and UI components
+  - useCallback for stable callback references
+  - useMemo for computed values
+  - RequestAnimationFrame-based scroll handling
+
 ## Recent Changes
-- December 2025: 
-  - Replaced Google Gemini AI with Mistral AI for chat functionality
-  - Major performance optimization:
-    - Moved component-local state (activeCategory, activeFaq) into PageContent to enable effective memoization
-    - Wrapped callbacks with useCallback for stable references
-    - Improved scroll handler with refs to avoid unnecessary re-renders
-    - Removed heavy blur effects (blur-[100px]) and replaced with static gradients
-    - Disabled expensive blob animations
-    - Replaced backdrop-filter elements with solid backgrounds
-    - Added CSS containment (contain: paint) for better rendering performance
-    - Slowed down remaining animations for smoother experience
-    - Added reduced motion support for accessibility
-  - Added favicon from logo.jpg
-  - Updated header and footer to use the logo from assets
+- December 2025:
+  - Major architecture refactoring for Apple-like smoothness:
+    - Split 966-line App.tsx into 14 separate components
+    - Created sections/ and ui/ component directories
+    - All components wrapped with React.memo
+  - CSS animation overhaul:
+    - Removed heavy blur effects and blob animations
+    - Added GPU acceleration with will-change and transform3d
+    - Implemented contain: layout for rendering isolation
+    - Smoother transitions with cubic-bezier curves
+  - Lazy loading for modals and chat widget
   - Configured for Replit environment (port 5000, allowedHosts enabled)
