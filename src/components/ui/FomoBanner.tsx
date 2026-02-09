@@ -15,7 +15,7 @@ export const FomoBanner = memo(({ selectedCity, toggleBooking }: FomoBannerProps
           <Gift size={16} />
           <span className="uppercase tracking-wide">Скидка 50% + ЗОНА В ПОДАРОК</span>
         </div>
-        <span className="opacity-80 hidden md:inline">— только для новых клиентов в г. {selectedCity.name}</span>
+        <span className="opacity-80 hidden md:inline">— только для новых клиентов</span>
         <button 
           onClick={toggleBooking} 
           className="bg-white text-brand-600 px-4 py-1 rounded-full text-xs font-extrabold hover:bg-brand-50 transition-colors duration-200 shadow-sm ml-2 active:scale-95"

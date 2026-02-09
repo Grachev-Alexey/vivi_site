@@ -50,7 +50,7 @@ export const LocationSection = memo(({ selectedCity, toggleBooking }: LocationSe
                     <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                     Открыто сейчас
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-extrabold text-dark mb-2">г. {selectedCity.name}</h3>
+                  <h3 className="text-2xl md:text-3xl font-extrabold text-dark mb-2">The Cashmere</h3>
                   <p className="text-gray-500 font-medium flex items-center gap-2">
                     <MapPin size={18} className="text-brand-500"/> {selectedCity.address}
                   </p>

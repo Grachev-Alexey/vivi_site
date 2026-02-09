@@ -1,4 +1,4 @@
-import { City, Service, Review } from "./types";
+import { Service, Review } from "./types";
 
 const UNIFIED_PHONE = "+7 (969) 777-14-85";
 
@@ -6,7 +6,7 @@ const DEFAULT_REVIEWS: Review[] = [
   {
     id: 1,
     name: "Екатерина В.",
-    text: "Лазер Pioneer просто космос! После александритового этот вообще не больно. Студия ViVi — любовь.",
+    text: "Лазер Pioneer просто космос! После александритового этот вообще не больно. Студия The Cashmere — любовь.",
     rating: 5,
     date: "2 дня назад",
   },
@@ -26,139 +26,13 @@ const DEFAULT_REVIEWS: Review[] = [
   },
 ];
 
-export const CITIES: City[] = [
-  {
-    id: "krasnodar",
-    name: "Краснодар",
-    address: "ул. Карасунская 79, салон красоты Даната",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Krasnodar"],
-  },
-  {
-    id: "irkutsk",
-    name: "Иркутск",
-    address: "ул. Софьи Перовской, дом 30, оф. 326",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Irkutsk"],
-  },
-  {
-    id: "kazan",
-    name: "Казань",
-    address: "ул. Спартаковская 88Б",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Kazan"],
-  },
-  {
-    id: "volgograd",
-    name: "Волгоград",
-    address: "проспект Ленина, д. 36",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Volgograd"],
-    yandexMapsOrgId: "67997354453",
-    reviews: [
-      {
-        id: 1,
-        name: "Анастасия М.",
-        text: "Прекрасная студия! Мастер очень аккуратная, процедура практически безболезненная. Результат виден уже после первого сеанса.",
-        rating: 5,
-        date: "3 дня назад",
-      },
-      {
-        id: 2,
-        name: "Ольга К.",
-        text: "Хожу уже полгода, волосы почти не растут. Очень довольна результатом и сервисом!",
-        rating: 5,
-        date: "1 неделю назад",
-      },
-      {
-        id: 3,
-        name: "Дарья В.",
-        text: "Чисто, уютно, современное оборудование. Рекомендую всем!",
-        rating: 5,
-        date: "2 недели назад",
-      },
-    ],
-  },
-  {
-    id: "samara",
-    name: "Самара",
-    address: "Улица Ново-Садовая, 8/4, 1 этаж, студия красоты Anatomia",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Samara"],
-  },
-  {
-    id: "krasnoyarsk",
-    name: "Красноярск",
-    address: "БЦ Метрополь, пр-кт Мира, д.10",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Krasnoyarsk"],
-  },
-  {
-    id: "novosibirsk",
-    name: "Новосибирск",
-    address: "Ядринцевская 18, студия красоты Контраст, 1 этаж",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Novosibirsk"],
-  },
-  {
-    id: "spb-pionerskaya",
-    name: "СПб (Пионерская)",
-    address: "Аллея Поликарпова, 2. Бьюти-коворкинг Cosmo",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Saint Petersburg", "St Petersburg"],
-  },
-  {
-    id: "spb-spasskaya",
-    name: "СПб (Спасская)",
-    address: "ул. Гороховая, д.50",
-    phone: UNIFIED_PHONE,
-    detectionAliases: [],
-  },
-  {
-    id: "tyumen",
-    name: "Тюмень",
-    address: "ул. Малыгина 90",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Tyumen"],
-  },
-  {
-    id: "ekb",
-    name: "Екатеринбург",
-    address: "проспект Ленина 53, салон красоты Ptichkas style",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Yekaterinburg", "Ekaterinburg"],
-  },
-  {
-    id: "chelyabinsk",
-    name: "Челябинск",
-    address: "Ул. Маркса, 81",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Chelyabinsk"],
-  },
-  {
-    id: "rostov",
-    name: "Ростов-на-Дону",
-    address: "Газетный пер., 53",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Rostov-on-Don", "Rostov"],
-  },
-  {
-    id: "omsk",
-    name: "Омск",
-    address: "ул. Ленина 53, салон красоты Joli",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Omsk"],
-  },
-  {
-    id: "ufa",
-    name: "Уфа",
-    address: "Заки Валиди 73, студия Эстетик Лаундж",
-    phone: UNIFIED_PHONE,
-    detectionAliases: ["Ufa"],
-  },
-];
-
-export const DEFAULT_REVIEWS_LIST = DEFAULT_REVIEWS;
+export const CITY = {
+  id: "volgograd",
+  name: "Волгоград",
+  address: "ул. Рокоссовского, д. 32А",
+  phone: UNIFIED_PHONE,
+  yandexMapsOrgId: "67997354453",
+};
 
 export const SERVICES: Service[] = [
   {
@@ -418,7 +292,7 @@ export const SPECIALISTS = [
 ];
 
 export const AI_SYSTEM_INSTRUCTION = `
-Ты - умный ассистент сети студий ViVi.
+Ты - умный ассистент студии The Cashmere.
 Твоя задача: консультировать по гибридному лазеру Pioneer Ozero Khanka и ценам.
 Акция: Скидка 50% на первый визит + одна зона в подарок (кроме крупных).
 Цены (с учетом скидки):
@@ -426,5 +300,6 @@ export const AI_SYSTEM_INSTRUCTION = `
 - Подмышки: 650р
 - Голени: 1450р
 - Ноги полностью (Бедра+Голени): 3100р
-Единый телефон: +7 (969) 777-14-85.
+Наш адрес: Волгоград, ул. Рокоссовского, д. 32А.
+Телефон: +7 (969) 777-14-85.
 `;
