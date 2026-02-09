@@ -1,13 +1,19 @@
+export interface Review {
+  id: number;
+  name: string;
+  text: string;
+  rating: number;
+  date: string;
+}
+
 export interface City {
   id: string;
   name: string;
   address?: string;
   phone?: string;
-  detectionAliases?: string[]; // English names returned by GeoAPI
-  coordinates?: {
-    lat: number;
-    lng: number;
-  };
+  detectionAliases?: string[];
+  yandexMapsOrgId?: string;
+  reviews?: Review[];
 }
 
 export interface Service {

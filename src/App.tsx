@@ -40,6 +40,17 @@ const App: React.FC = () => {
   const rafIdRef = useRef<number | null>(null);
 
   useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
+
+  useEffect(() => {
     const handleScroll = () => {
       if (rafIdRef.current !== null) return;
       
@@ -104,48 +115,7 @@ const App: React.FC = () => {
       }
     };
 
-    const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-      const R = 6371; 
-      const dLat = (lat2 - lat1) * Math.PI / 180;
-      const dLon = (lon2 - lon1) * Math.PI / 180;
-      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return R * c;
-    };
-
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          let closestCity = CITIES[0];
-          let minDistance = Infinity;
-
-          CITIES.forEach(city => {
-            if (city.coordinates) {
-              const dist = getDistance(latitude, longitude, city.coordinates.lat, city.coordinates.lng);
-              if (dist < minDistance) {
-                minDistance = dist;
-                closestCity = city;
-              }
-            }
-          });
-
-          if (minDistance < 200) {
-            setSelectedCity(closestCity);
-            setShowCityToast(true);
-          } else {
-            detectCityByIP();
-          }
-        },
-        () => {
-          detectCityByIP();
-        }
-      );
-    } else {
-      detectCityByIP();
-    }
+    detectCityByIP();
   }, []);
 
   const handleCityChange = useCallback((city: City) => {
@@ -199,11 +169,6 @@ const App: React.FC = () => {
         "addressLocality": selectedCity.name,
         "addressCountry": "RU"
       },
-      "geo": selectedCity.coordinates ? {
-        "@type": "GeoCoordinates",
-        "latitude": selectedCity.coordinates.lat,
-        "longitude": selectedCity.coordinates.lng
-      } : undefined,
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
@@ -268,7 +233,7 @@ const App: React.FC = () => {
         <TechnologySection />
         <SpecialistsSection />
         <FAQSection toggleBooking={() => toggleBooking()} />
-        <ReviewsSection />
+        <ReviewsSection selectedCity={selectedCity} />
         <LocationSection selectedCity={selectedCity} toggleBooking={() => toggleBooking()} />
       </main>
 
