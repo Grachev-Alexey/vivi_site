@@ -9,11 +9,11 @@ export const Footer = memo(() => {
         <div className="grid md:grid-cols-4 gap-12 mb-16">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-6">
-              <img src={logoImg} alt="The Cashmere Logo" className="w-8 h-8 rounded-lg object-cover" />
-              <span className="font-extrabold text-2xl tracking-tight text-brand-500 font-serif">The Cashmere</span>
+              <img src={logoImg} alt="ViVi Logo" className="w-8 h-8 rounded-lg object-cover" />
+              <span className="font-extrabold text-2xl tracking-tight text-brand-500 font-serif">ViVi</span>
             </div>
             <p className="text-gray-500 leading-relaxed max-w-sm mb-8">
-              Студия лазерной эпиляции в Волгограде. Мы делаем премиальные услуги доступными, сохраняя высочайшие стандарты качества и безопасности.
+              Федеральная сеть студий лазерной эпиляции. Мы делаем премиальные услуги доступными, сохраняя высочайшие стандарты качества и безопасности.
             </p>
             <div className="flex gap-4">
               <a href="#" className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-dark hover:bg-brand-500 hover:text-white transition-colors duration-200"><Instagram size={20}/></a>

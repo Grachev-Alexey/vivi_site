@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Suspense, useMemo, useCallback, useRef, lazy } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { CITY, SERVICES } from './constants';
+import { CITIES, SERVICES } from './constants';
+import { City } from './types';
 
 import { 
   HeroSection, 
@@ -17,6 +18,7 @@ import {
 import { 
   Header, 
   FomoBanner, 
+  CityToast, 
   MobileNav, 
   ScrollTopButton 
 } from './components/ui';
@@ -25,10 +27,12 @@ const ChatWidget = lazy(() => import('./components/ChatWidget').then(m => ({ def
 const BookingModal = lazy(() => import('./components/BookingModal').then(m => ({ default: m.BookingModal })));
 
 const App: React.FC = () => {
+  const [selectedCity, setSelectedCity] = useState<City>(CITIES[0]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [preselectedServiceId, setPreselectedServiceId] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [showCityToast, setShowCityToast] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   const scrolledRef = useRef(false);
@@ -78,6 +82,59 @@ const App: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const savedCityId = localStorage.getItem('vivi_city_id');
+    if (savedCityId) {
+      const city = CITIES.find(c => c.id === savedCityId);
+      if (city) {
+        setSelectedCity(city);
+        return;
+      }
+    }
+
+    const detectCityByIP = async () => {
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        if (!response.ok) return;
+        const data = await response.json();
+        const detectedCityName = data.city;
+
+        if (detectedCityName) {
+          const foundCity = CITIES.find(c => 
+            c.detectionAliases?.some(alias => 
+              alias.toLowerCase() === detectedCityName.toLowerCase()
+            )
+          );
+          if (foundCity) {
+            setSelectedCity(foundCity);
+            setShowCityToast(true);
+          }
+        }
+      } catch {
+        console.error("Auto-detection failed");
+      }
+    };
+
+    detectCityByIP();
+  }, []);
+
+  const handleCityChange = useCallback((city: City) => {
+    setSelectedCity(city);
+    setIsMenuOpen(false);
+    setShowCityToast(false);
+    localStorage.setItem('vivi_city_id', city.id);
+  }, []);
+
+  const confirmAutoCity = useCallback(() => {
+    setShowCityToast(false);
+    localStorage.setItem('vivi_city_id', selectedCity.id);
+  }, [selectedCity.id]);
+
+  const requestCityChange = useCallback(() => {
+    setShowCityToast(false);
+    setIsMenuOpen(true);
+  }, []);
+
   const toggleBooking = useCallback((serviceId?: string) => {
     if (serviceId && typeof serviceId === 'string') {
       setPreselectedServiceId(serviceId);
@@ -101,15 +158,15 @@ const App: React.FC = () => {
     const schema = {
       "@context": "https://schema.org",
       "@type": "BeautySalon",
-      "name": "The Cashmere Лазерная эпиляция",
+      "name": `ViVi Лазерная эпиляция ${selectedCity.name}`,
       "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881",
-      "@id": "https://the-cashmere.ru",
-      "url": "https://the-cashmere.ru",
-      "telephone": CITY.phone,
+      "@id": `https://vivi-laser.ru/${selectedCity.id}`,
+      "url": "https://vivi-laser.ru",
+      "telephone": selectedCity.phone,
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": CITY.address,
-        "addressLocality": CITY.name,
+        "streetAddress": selectedCity.address,
+        "addressLocality": selectedCity.name,
         "addressCountry": "RU"
       },
       "openingHoursSpecification": {
@@ -121,7 +178,7 @@ const App: React.FC = () => {
       "priceRange": "$$",
       "serviceArea": {
         "@type": "City",
-        "name": CITY.name
+        "name": selectedCity.name
       },
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
@@ -138,38 +195,46 @@ const App: React.FC = () => {
       }
     };
     return JSON.stringify(schema);
-  }, []);
+  }, [selectedCity]);
 
   return (
     <div className="min-h-screen font-sans antialiased pb-20 md:pb-0 relative overflow-x-hidden selection:bg-brand-100 selection:text-brand-900">
       <Helmet>
-        <title>The Cashmere | Лазерная эпиляция Волгоград | Скидка -50%</title>
-        <meta name="description" content={`Лазерная эпиляция в г. ${CITY.name}. Диодный лазер Pioneer Ozero Khanka. Цены от 300р. Скидка 50% на первый визит. Запишитесь онлайн!`} />
-        <meta property="og:title" content="The Cashmere | Лазерная эпиляция" />
+        <title>Лазерная эпиляция {selectedCity.name} | Скидка -50% | Студия ViVi</title>
+        <meta name="description" content={`Лазерная эпиляция в г. ${selectedCity.name}. Диодный лазер Pioneer Ozero Khanka, медицинская лицензия. Цены от 300р. Скидка 50% на первый визит. Запишитесь онлайн!`} />
+        <meta property="og:title" content={`Лазерная эпиляция ${selectedCity.name} | ViVi`} />
         <meta property="og:description" content="Безупречно гладкая кожа без боли. Скидка 50% для новых клиентов!" />
         <script type="application/ld+json">{schemaData}</script>
-        <link rel="canonical" href="https://the-cashmere.ru" />
+        <link rel="canonical" href={`https://vivi-laser.ru/${selectedCity.id}`} />
       </Helmet>
 
-      <FomoBanner selectedCity={CITY} toggleBooking={() => toggleBooking()} />
+      <CityToast 
+        show={showCityToast} 
+        selectedCity={selectedCity} 
+        onConfirm={confirmAutoCity} 
+        onRequestChange={requestCityChange} 
+      />
+
+      <FomoBanner selectedCity={selectedCity} toggleBooking={() => toggleBooking()} />
 
       <Header 
         scrolled={scrolled}
-        selectedCity={CITY}
+        selectedCity={selectedCity}
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
+        handleCityChange={handleCityChange}
         toggleBooking={() => toggleBooking()}
       />
 
       <main>
-        <HeroSection selectedCity={CITY} toggleBooking={() => toggleBooking()} />
+        <HeroSection selectedCity={selectedCity} toggleBooking={() => toggleBooking()} />
         <MarqueeSection />
         <ServicesSection toggleBooking={toggleBooking} servicesByCategory={servicesByCategory} />
         <TechnologySection />
         <SpecialistsSection />
         <FAQSection toggleBooking={() => toggleBooking()} />
-        <ReviewsSection selectedCity={CITY} />
-        <LocationSection selectedCity={CITY} toggleBooking={() => toggleBooking()} />
+        <ReviewsSection selectedCity={selectedCity} />
+        <LocationSection selectedCity={selectedCity} toggleBooking={() => toggleBooking()} />
       </main>
 
       <Footer />
@@ -187,7 +252,7 @@ const App: React.FC = () => {
           <BookingModal 
             isOpen={isBookingOpen} 
             onClose={() => setIsBookingOpen(false)} 
-            initialCity={CITY}
+            initialCity={selectedCity}
             preselectedServiceId={preselectedServiceId}
           />
         )}

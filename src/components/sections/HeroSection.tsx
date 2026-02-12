@@ -23,7 +23,8 @@ export const HeroSection = memo(({ selectedCity, toggleBooking }: HeroSectionPro
             </div>
             
             <h1 className="text-5xl lg:text-7xl font-extrabold text-dark leading-[1.05] mb-8 tracking-tight">
-              Студия <span className="text-gradient">The Cashmere</span>
+              Гладкая кожа <br/>
+              <span className="text-gradient">без компромиссов.</span>
             </h1>
 
             <p className="text-lg text-gray-500 font-medium leading-relaxed mb-10 max-w-lg">
@@ -64,8 +65,8 @@ export const HeroSection = memo(({ selectedCity, toggleBooking }: HeroSectionPro
                   <Users size={20} />
                 </div>
                 <div>
-                  <div className="text-sm font-extrabold text-dark">Премиум</div>
-                  <div className="text-xs text-gray-400 font-bold">Сервис</div>
+                  <div className="text-sm font-extrabold text-dark">15 000+</div>
+                  <div className="text-xs text-gray-400 font-bold">Клиентов сети</div>
                 </div>
               </div>
             </div>

@@ -3,24 +3,24 @@
 @theme {
   --font-sans: 'Manrope', sans-serif;
 
-  --color-brand-50: #f4f6f8;
-  --color-brand-100: #e9ecf1;
-  --color-brand-200: #c8d0db;
-  --color-brand-300: #a2afc0;
-  --color-brand-400: #71869e;
-  --color-brand-500: #1C2B38;
-  --color-brand-600: #182531;
-  --color-brand-700: #121c25;
-  --color-brand-900: #0a1015;
+  --color-brand-50: #fff0f5;
+  --color-brand-100: #ffe3ec;
+  --color-brand-200: #ffc7da;
+  --color-brand-300: #ff9bc0;
+  --color-brand-400: #ff649f;
+  --color-brand-500: #f02e6e;
+  --color-brand-600: #db1b59;
+  --color-brand-700: #b81246;
+  --color-brand-900: #8a0a33;
 
-  --color-dark: #0a1015;
-  --color-dark-surface: #1C2B38;
+  --color-dark: #1a1b26;
+  --color-dark-surface: #24283b;
 
-  --shadow-glow: 0 0 30px rgba(28, 43, 56, 0.15);
-  --shadow-glow-sm: 0 0 15px rgba(28, 43, 56, 0.08);
+  --shadow-glow: 0 0 30px rgba(240, 46, 110, 0.2);
+  --shadow-glow-sm: 0 0 15px rgba(240, 46, 110, 0.1);
   --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.05);
-  --shadow-card-hover: 0 20px 40px -15px rgba(28, 43, 56, 0.1);
-  --shadow-button: 0 8px 20px -5px rgba(28, 43, 56, 0.3);
+  --shadow-card-hover: 0 20px 40px -15px rgba(240, 46, 110, 0.12);
+  --shadow-button: 0 8px 20px -5px rgba(240, 46, 110, 0.35);
 
   --animate-fade-in: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   --animate-slide-up: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -68,7 +68,7 @@ body {
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #1C2B38 0%, #2a3d4d 50%, #0a1015 100%);
+  background: linear-gradient(135deg, #f02e6e 0%, #db1b59 50%, #8a0a33 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -186,8 +186,8 @@ body {
 
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #fff; }
-::-webkit-scrollbar-thumb { background: #c8d0db; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #a2afc0; }
+::-webkit-scrollbar-thumb { background: #ffe3ec; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #ff9bc0; }
 
 @media (hover: none) and (pointer: coarse) {
   .service-card:hover,
